@@ -1,0 +1,11 @@
+body * {
+	display: block;
+}
+
+#login_form {
+	display: block;
+}
+
+a {
+	display: inline;
+}

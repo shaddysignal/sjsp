@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry including="**/*.java" kind="src" path="src/main/java"/>
-	<classpathentry excluding="**/*.java" kind="src" path="src/main/resources"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/springframework/spring-core/${org.springframework.version}/spring-core-${org.springframework.version}.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/springframework/spring-expression/${org.springframework.version}/spring-expression-${org.springframework.version}.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/springframework/spring-beans/${org.springframework.version}/spring-beans-${org.springframework.version}.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/springframework/spring-aop/${org.springframework.version}/spring-aop-${org.springframework.version}.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/springframework/spring-context/${org.springframework.version}/spring-context-${org.springframework.version}.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/springframework/spring-context-support/${org.springframework.version}/spring-context-support-${org.springframework.version}.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/springframework/spring-tx/${org.springframework.version}/spring-tx-${org.springframework.version}.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/springframework/spring-jdbc/${org.springframework.version}/spring-jdbc-${org.springframework.version}.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/springframework/spring-orm/${org.springframework.version}/spring-orm-${org.springframework.version}.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/springframework/spring-oxm/${org.springframework.version}/spring-oxm-${org.springframework.version}.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/springframework/spring-web/${org.springframework.version}/spring-web-${org.springframework.version}.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/springframework/spring-webmvc/${org.springframework.version}/spring-webmvc-${org.springframework.version}.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/springframework/spring-webmvc-portlet/${org.springframework.version}/spring-webmvc-portlet-${org.springframework.version}.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/springframework/spring-test/${org.springframework.version}/spring-test-${org.springframework.version}.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/cglib/cglib/2.2.2/cglib-2.2.2.jar"/>
-	<classpathentry kind="var" path="M2_REPO/junit/junit/3.8.1/junit-3.8.1.jar"/>
+	<classpathentry kind="src" output="target/classes" path="src/main/java">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

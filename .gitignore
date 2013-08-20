@@ -10,3 +10,7 @@ target/*
 # Antivim #
 *.swp
 *.orig
+
+/target
+*.settings
+*.springBeans
