@@ -1,18 +1,19 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html5>
 <html>
 <head>
-<title>Cabinet</title>
-<link rel="stylesheet" type="text/css" href="/css/main.css" />
+	<title>Cabinet</title>
+	<%@include file="chunks/head.jsp" %>
 </head>
 <body>
 	<h2>Hello <%= session.getCreationTime() %>!</h2>
 	<div>
 		<p>You can delete your self by clicking on</p>
-		<a href="delete" onclick="confirm('Are you sure?')">here</a>
+		<a href="/delete.kitty" onclick="confirm('Are you sure?')">here</a>
 	</div>
 	<div>
 		<p>Or you can update data by clicking on</p>
-		<a href="first_step">here</a>
+		<a href="/first.kitty">here</a>
 	</div>
 </body>
 </html>
