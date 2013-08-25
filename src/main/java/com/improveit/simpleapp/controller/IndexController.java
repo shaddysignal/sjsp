@@ -35,7 +35,7 @@ public class IndexController {
 	private UserService userService;
 	
 	@RequestMapping(value="/index", method=RequestMethod.GET)
-	public String index(ModelMap model) {		
+	public String index(ModelMap model) {
 		model.addAttribute("user", userService.getCurrentUser());
 		return "cabinet";
 	}
@@ -52,14 +52,13 @@ public class IndexController {
 	}
 	
 	@RequestMapping(value="/undefine", method=RequestMethod.DELETE)
-	public String undefining(@RequestParam User user) {
-		
+	public String undefining(@RequestParam User user) {		
 		return "index";
 	}
 	
 	@RequestMapping(value="/first", method=RequestMethod.GET)
 	public String first(User user) {
-		userService.setUserStep("first");		
+		userService.setUserStep("first");
 		return "first";
 	}
 	

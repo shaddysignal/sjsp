@@ -16,17 +16,14 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-@Import({ SessionConfig.class })
+@Import({ SessionConfig.class, SecurityConfig.class })
 @Configuration
-@ComponentScan(basePackages = { "com.improveit.simpleapp.controller", 
-		"com.improveit.simpleapp.services" })
+@ComponentScan(basePackages = { "com.improveit.simpleapp.controller", "com.improveit.simpleapp.services" })
 @EnableWebMvc
 @EnableTransactionManagement
 @PropertySource({ "classpath:hibernate.properties", "classpath:jdbc.properties" })
@@ -47,14 +44,6 @@ public class Config extends WebMvcConfigurerAdapter {
 	public void configureDefaultServletHandling(
 			DefaultServletHandlerConfigurer configurer) {
 		configurer.enable();
-	}
-
-	@Bean
-	public ViewResolver viewResolver() {
-		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-		viewResolver.setPrefix("/jsp/");
-		viewResolver.setSuffix(".jsp");
-		return viewResolver;
 	}
 
 	@Bean

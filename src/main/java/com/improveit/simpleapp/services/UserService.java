@@ -1,5 +1,7 @@
 package com.improveit.simpleapp.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +17,7 @@ public class UserService {
 	private IUserDao userDao;
 	
 	@Autowired
-	private UserSession userScope;
+	private UserSession userSession;
 	
 	private boolean validateEmail(String paramValue) {
 		if(paramValue.matches("[a-zA-Z0-9_.]+@[a-zA-Z0-9_.]+\\.[a-z]{1,4}"))
@@ -71,12 +73,24 @@ public class UserService {
 	/**
 	 * Delegate create to dao layer.
 	 * If user exist - update it.
+	 * Also refresh session user.
 	 * 
 	 * @param user to insert
 	 */
 	@Transactional
 	public int putUser(User user) {
-		return userDao.update(user);
+		userSession.setUser(user);
+		userSession.getUser().setId(userDao.updateOrCreate(user));
+		return userSession.getUser().getId();
+	}
+	
+	/**
+	 * Delegate select all users to dao layer.
+	 * 	
+	 * @return all registered users
+	 */
+	public List<User> getAllUsers() {
+		return userDao.getAllUsers();
 	}
 	
 	/**
@@ -90,15 +104,15 @@ public class UserService {
 	}
 	
 	public User getCurrentUser() {
-		return userScope.getUser();
+		return userSession.getUser();
 	}
 	
 	public void setUserStep(String step) {
-		userScope.setStep(step);
+		userSession.setStep(step);
 	}
 	
 	public String getUserStep() {
-		return userScope.getStep();
+		return userSession.getStep();
 	}
 	
 }

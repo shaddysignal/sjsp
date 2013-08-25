@@ -8,8 +8,8 @@
 <body>
 	<h2>Hello <%= session.getCreationTime() %>!</h2>
 	<div>
-		<p>You can delete your self by clicking on</p>
-		<a href="/delete.kitty" onclick="confirm('Are you sure?')">here</a>
+		<p>You can logout your self by clicking on</p>
+		<a href="/undefine.kitty" onclick="return confirm('Are you sure?')">here</a>
 	</div>
 	<div>
 		<p>Or you can update data by clicking on</p>

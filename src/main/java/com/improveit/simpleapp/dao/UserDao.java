@@ -13,23 +13,16 @@ import com.improveit.simpleapp.intreface.IUserDao;
 import com.improveit.simpleapp.model.User;
 
 @Repository
+@Transactional
 public class UserDao implements IUserDao {
 
 	@Autowired
 	private SessionFactory sessionFactory;
-	
-	public int create(User newUser) {
-		Session s = sessionFactory.getCurrentSession();
-		Transaction tx = s.beginTransaction();
-		User mergedUser = (User) s.save(newUser);
-		tx.commit();
-		return mergedUser.getId();
-	}
 
-	public int update(User existingUser) {
+	public int updateOrCreate(User user) {
 		Session s = sessionFactory.getCurrentSession();
 		Transaction tx = s.beginTransaction();
-		User mergedUser = (User) s.merge(existingUser);
+		User mergedUser = (User) s.merge(user);
 		tx.commit();
 		return mergedUser.getId();
 	}
@@ -41,15 +34,19 @@ public class UserDao implements IUserDao {
 		tx.commit();
 	}
 	
+	public List<User> getAllUsers() {
+		Session s = sessionFactory.getCurrentSession();
+		return s.createQuery("from User").list();
+	}
+	
 	/**
-	 * Note: If you want get by serial+number, proceed something like
+	 * Note: You can get by serial+number, if you need, proceed like
 	 * paramName = "serialnumber", paramValue = "dddddddddd"
 	 * 
 	 * @param paramName
 	 * @param paramValue
-	 * @return user by one of unique params, null if none match, first if more than one
+	 * @return user by one of unique params, null if none match
 	 */
-	@Transactional
 	public User getUnique(String paramName, String paramValue) {
 		Session s = sessionFactory.getCurrentSession();
 		Transaction tx = s.beginTransaction();

@@ -11,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-
 @Entity
 @Table(name="users")
 public class User implements Iterable<String> {
@@ -32,18 +31,18 @@ public class User implements Iterable<String> {
 	}
 
 	{
-		mapper.put("firstName", "");
-		mapper.put("secondName", "");
-		mapper.put("fathersName", "");
-		mapper.put("phonenumber", "");
-		mapper.put("email", "");
-		mapper.put("password", "");
-		mapper.put("birthdate", "");
-		mapper.put("serial", "");
-		mapper.put("number", "");
-		mapper.put("region", "");
-		mapper.put("city", "");
-		mapper.put("street", "");
+		mapper.put("firstName", null);
+		mapper.put("secondName", null);
+		mapper.put("fathersName", null);
+		mapper.put("phonenumber", null);
+		mapper.put("email", null);
+		mapper.put("password", null);
+		mapper.put("birthdate", null);
+		mapper.put("serial", null);
+		mapper.put("number", null);
+		mapper.put("region", null);
+		mapper.put("city", null);
+		mapper.put("street", null);
 	}
 	
 	@Column(name="user_second_name")

@@ -3,14 +3,19 @@ package com.improveit.simpleapp.configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
-
-import com.improveit.simpleapp.dao.UserDao;
-import com.improveit.simpleapp.intreface.IUserDao;
-import com.improveit.simpleapp.model.UserSession;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 @Configuration
 @ComponentScan(basePackages={"com.improveit.simpleapp.controller", "com.improveit.simpleapp.services"})
 public class SimpleServletConfig {
+	
+	@Bean
+	public ViewResolver viewResolver() {
+		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+		viewResolver.setPrefix("/jsp/");
+		viewResolver.setSuffix(".jsp");
+		return viewResolver;
+	}
 	
 }

@@ -2,7 +2,7 @@
 <!DOCTYPE html5>
 <html>
 <head>
-	<title>Login failed</title>
+	<title>Something failed</title>
 	<%@include file="chunks/head.jsp" %>
 </head>
 <body>
