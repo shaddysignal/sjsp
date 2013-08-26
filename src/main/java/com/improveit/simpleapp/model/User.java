@@ -1,27 +1,55 @@
 package com.improveit.simpleapp.model;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Entity
 @Table(name="users")
-public class User implements Iterable<String> {
-
-	@Transient
-	private final Map<String, String> mapper = new HashMap<String, String>(12);
+public class User {
 	
 	@Id
 	@GeneratedValue
 	private int id;
 	
+	@Column(name="user_first_name")
+	private String firstName;
+	
+	@Column(name="user_second_name")
+	private String secondName;
+	
+	@Column(name="user_fathers_name")
+	private String fathersName;
+	
+	@Column(name="user_phonenumber", unique=true)
+	private String phonenumber;
+	
+	@Column(name="user_email", unique=true)
+	private String email;
+	
+	@Column(name="user_password")
+	private String password;
+	
+	@Column(name="user_birthdate")
+	private String birthdate;
+	
+	@Column(name="user_serial")
+	private String serial;
+	
+	@Column(name="user_number")
+	private String number;
+	
+	@Column(name="user_region")
+	private String region;
+	
+	@Column(name="user_city")
+	private String city;
+	
+	@Column(name="user_street")
+	private String street;
+
 	public int getId() {
 		return id;
 	}
@@ -29,154 +57,102 @@ public class User implements Iterable<String> {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	{
-		mapper.put("firstName", null);
-		mapper.put("secondName", null);
-		mapper.put("fathersName", null);
-		mapper.put("phonenumber", null);
-		mapper.put("email", null);
-		mapper.put("password", null);
-		mapper.put("birthdate", null);
-		mapper.put("serial", null);
-		mapper.put("number", null);
-		mapper.put("region", null);
-		mapper.put("city", null);
-		mapper.put("street", null);
-	}
 	
-	@Column(name="user_second_name")
-	public String getSecondName() {
-		return mapper.get("secondName");
-	}
-
-	public void setSecondName(String secondName) {
-
-		mapper.put("secondName", secondName);
-	}
-	
-	@Column(name="user_fathers_name")
-	public String getFathersName() {
-		return mapper.get("fathersName");
-	}
-
-	public void setFathersName(String fathersName) {
-		mapper.put("fathersName", fathersName);
-	}
-
-	@Column(name="user_phone_number")
-	public String getPhonenumber() {
-		return mapper.get("phonenumber");
-	}
-
-	public void setPhonenumber(String phonenumber) {
-		mapper.put("phonenumber", phonenumber);
-	}
-
-	@Column(name="user_email")
-	public String getEmail() {
-		return mapper.get("email");
-	}
-
-	public void setEmail(String email) {
-		mapper.put("email", email);
-	}
-
-	@Column(name="user_password")
-	public String getPassword() {
-		return mapper.get("password");
-	}
-
-	public void setPassword(String password) {
-		mapper.put("password", password);
-	}
-
-	@Column(name="user_birthdate")
-	public String getBirthdate() {
-		return mapper.get("birthdate");
-	}
-
-	public void setBirthdate(String birthdate) {
-		mapper.put("birthdate", birthdate);
-	}
-
-	@Column(name="user_serial")
-	public String getSerial() {
-		return mapper.get("serial");
-	}
-
-	public void setSerial(String serial) {
-		mapper.put("serial", serial);
-	}
-
-	@Column(name="user_number")
-	public String getNumber() {
-		return mapper.get("number");
-	}
-
-	public void setNumber(String number) {
-		mapper.put("number", number);
-	}
-
-	@Column(name="user_region")
-	public String getRegion() {
-		return mapper.get("region");
-	}
-
-	public void setRegion(String region) {
-		mapper.put("region", region);
-	}
-
-	@Column(name="user_city")
-	public String getCity() {
-		return mapper.get("city");
-	}
-
-	public void setCity(String city) {
-		mapper.put("city", city);
-	}
-
-	@Column(name="user_street")
-	public String getStreet() {
-		return mapper.get("street");
-	}
-
-	public void setStreet(String street) {
-		mapper.put("street", street);
-	}
-
-	@Column(name="user_first_name")
 	public String getFirstName() {
-		return mapper.get("firstName");
+		return firstName;
 	}
 
 	public void setFirstName(String firstName) {
-		mapper.put("firstName", firstName);
+		this.firstName = firstName;
+	}
+	
+	public String getSecondName() {
+		return secondName;
 	}
 
-	public Iterator<String> iterator() {
-		return mapper.keySet().iterator();
+	public void setSecondName(String secondName) {
+		this.secondName = secondName;
 	}
 	
-	/**
-	 * Just try to avoid reflection
-	 * 
-	 * @param paramName name of param
-	 * @return param value
-	 */
-	@Transient
-	public String getParam(String paramName) {
-		return mapper.get(paramName);
+	public String getFathersName() {
+		return fathersName;
 	}
-	
-	/**
-	 * Just try to avoid reflection
-	 * 
-	 * @param paramName
-	 * @param paramValue
-	 */
-	public void setParam(String paramName, String paramValue) {
-		mapper.put(paramName, paramValue);
+
+	public void setFathersName(String fathersName) {
+		this.fathersName = fathersName;
 	}
+
+	public String getPhonenumber() {
+		return phonenumber;
+	}
+
+	public void setPhonenumber(String phonenumber) {
+		this.phonenumber = phonenumber;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getBirthdate() {
+		return birthdate;
+	}
+
+	public void setBirthdate(String birthdate) {
+		this.birthdate = birthdate;
+	}
+
+	public String getSerial() {
+		return serial;
+	}
+
+	public void setSerial(String serial) {
+		this.serial = serial;
+	}
+
+	public String getNumber() {
+		return number;
+	}
+
+	public void setNumber(String number) {
+		this.number = number;
+	}
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
 
 }

@@ -13,23 +13,28 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.improveit.simpleapp.model.User;
 import com.improveit.simpleapp.services.UserService;
+import com.improveit.simpleapp.services.ValidationService;
 
 @Controller
 @RequestMapping("/")
 public class IndexController {
 	
 	private enum STEPS {
-		finale(null), third(finale), second(third), first(second);
+		finale(null), third(finale), second(third),	first(second);
 		
 		private STEPS next;
+		
 		private STEPS(STEPS next) {
 			this.next = next;
 		}
 		
 		public STEPS next() {
 			return next;
-		}		
+		}
 	};
+	
+	@Autowired
+	private ValidationService validator;
 	
 	@Autowired
 	private UserService userService;
@@ -37,7 +42,7 @@ public class IndexController {
 	@RequestMapping(value="/index", method=RequestMethod.GET)
 	public String index(ModelMap model) {
 		model.addAttribute("user", userService.getCurrentUser());
-		return "cabinet";
+		return userService.getUserStep();
 	}
 	
 	@RequestMapping(value="/define", method=RequestMethod.GET)
@@ -57,30 +62,30 @@ public class IndexController {
 	}
 	
 	@RequestMapping(value="/first", method=RequestMethod.GET)
-	public String first(User user) {
+	public String first(User user, ModelMap model) {
+		model.addAttribute("user", userService.getCurrentUser());
 		userService.setUserStep("first");
 		return "first";
 	}
 	
 	@RequestMapping(value="/next_step", method=RequestMethod.POST)
-	public String next_step(@RequestParam Map<String, String> values, User user) {
-		boolean valid = true;
-		for(String key : values.keySet()) {
-			valid = valid && userService.validate(key, values.get(key)) ? true : false;
-		}
-		if(valid) {
-			// I know this horrible, but it seems like smooth solution
+	public String next_step(@RequestParam Map<String, String> values, User user, ModelMap model) {
+		model.addAttribute("user", userService.getCurrentUser());
+		Map<String, String> errors = validator.valid(values);
+		if(errors.isEmpty()) {
 			userService.setUserStep(STEPS.valueOf(userService.getUserStep()).next().toString());
 			userService.putUser(user);
+		} else {
+			model.addAttribute("errors", errors);
 		}
 		return userService.getUserStep();
 	}
 	
 	@RequestMapping(value="/finale", method=RequestMethod.POST)
-	public String finale(@RequestParam Map<String, String> values, User user) {
-		next_step(values, user);
-		userService.putUser(user);
-		return "cabinet";
+	public String finale(@RequestParam Map<String, String> values, User user, ModelMap model) {
+		model.addAttribute("user", user);
+		userService.userDone();
+		return "finale";
 	}
 
 }

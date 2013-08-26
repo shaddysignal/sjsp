@@ -8,8 +8,8 @@
 </head>
 <body>
 	<form:form id="first" action="next_step.kitty" method="POST" commandName="user">
-		<form:input path="firstName" id="user_firstName" placeholder="First Name" /> 
-		<form:input path="secondName" id="user_secondName"	placeholder="Second Name" /> 
+		<form:input path="firstName" id="user_firstName" placeholder="First Name" />
+		<form:input path="secondName" id="user_secondName" placeholder="Second Name" />
 		<form:input path="fathersName" id="user_fathersName" placeholder="Fathers Name" />
 		<form:input path="phonenumber" id="user_phonenumber" placeholder="Phonenumber" />
 		<form:input path="email" id="user_email" placeholder="Email" /> 

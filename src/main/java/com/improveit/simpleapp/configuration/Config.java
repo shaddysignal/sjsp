@@ -21,9 +21,15 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import com.improveit.simpleapp.services.ValidationService;
+
 @Import({ SessionConfig.class, SecurityConfig.class })
 @Configuration
-@ComponentScan(basePackages = { "com.improveit.simpleapp.controller", "com.improveit.simpleapp.services" })
+@ComponentScan(basePackages = {
+		"com.improveit.simpleapp.controller",
+		"com.improveit.simpleapp.services",
+		"com.improveit.simpleapp.services.rules"
+	})
 @EnableWebMvc
 @EnableTransactionManagement
 @PropertySource({ "classpath:hibernate.properties", "classpath:jdbc.properties" })
@@ -79,9 +85,15 @@ public class Config extends WebMvcConfigurerAdapter {
 		prop.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
 		prop.put("hibernate.show_sql", env.getProperty("hibernate.dialect"));
 		prop.put("hibernate.current_session_context_class", env.getProperty("hibernate.current_session_context_class"));
+		prop.put("hibernate.hbm2dll.auto", env.getProperty("hibernate.hbm2dll.auto"));
 		return prop;
 	}
 
+	@Bean
+	public ValidationService validator() {
+		return new ValidationService();
+	}
+	
 	/*@Bean
 	public SimpleMappingExceptionResolver simpleMappingExceptionResolver() {
 		SimpleMappingExceptionResolver bean = new SimpleMappingExceptionResolver();

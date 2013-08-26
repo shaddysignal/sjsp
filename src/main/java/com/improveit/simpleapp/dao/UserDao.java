@@ -1,7 +1,11 @@
 package com.improveit.simpleapp.dao;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -9,12 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.improveit.simpleapp.intreface.IUserDao;
 import com.improveit.simpleapp.model.User;
 
 @Repository
 @Transactional
-public class UserDao implements IUserDao {
+public class UserDao {
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -34,40 +37,58 @@ public class UserDao implements IUserDao {
 		tx.commit();
 	}
 	
+	public void setUserDone(int userId) {
+		Session s = sessionFactory.getCurrentSession();
+		Transaction tx = s.beginTransaction();
+		s.createSQLQuery("insert into improve_it.usersDone (?) values (?)").
+			setParameter(0, "user_id").setParameter(1, userId).executeUpdate();
+		tx.commit();
+	}
+	
+	public List<User> getByParams(Map<String, String> params) {
+		if(params.isEmpty())
+			return getAllUsers();
+		Session s = sessionFactory.getCurrentSession();
+		Transaction tx = s.beginTransaction();
+		StringBuilder query = new StringBuilder("from User where ");
+		for(int i = 0, l = params.size(); i < l; i++) {
+			query.append("? = ? and ");
+		}		
+		Query q = s.createQuery(query.substring(0, query.lastIndexOf(" and ")));
+		int i = 0;
+		for(Entry<String, String> entry : params.entrySet()) {
+			q.setParameter(i++, entry.getKey());
+			q.setParameter(i++, entry.getValue());
+		}
+		List<?> users = q.list();
+		tx.commit();
+		return (List<User>)users;
+		
+	}
+	
 	public List<User> getAllUsers() {
 		Session s = sessionFactory.getCurrentSession();
-		return s.createQuery("from User").list();
+		Transaction tx = s.beginTransaction();
+		List<?> users = s.createQuery("from User").list();
+		tx.commit();
+		return (List<User>)users;
 	}
 	
 	/**
-	 * Note: You can get by serial+number, if you need, proceed like
-	 * paramName = "serialnumber", paramValue = "dddddddddd"
+	 * Get only first from selected collection. Use for get by unique
 	 * 
 	 * @param paramName
 	 * @param paramValue
-	 * @return user by one of unique params, null if none match
+	 * @return first from collection, or null if there is no users with such param
 	 */
-	public User getUnique(String paramName, String paramValue) {
+	public User getFirst(String paramName, String paramValue) {
 		Session s = sessionFactory.getCurrentSession();
 		Transaction tx = s.beginTransaction();
-		StringBuilder queryString = new StringBuilder("from User where ? = ?");
-		if(paramName.equals("serialnumber")) {
-			queryString.append(" and ? = ?");
-			String serial = paramValue.substring(0, 4);
-			String number = paramValue.substring(4);
-			List<?> users = s.createQuery(queryString.toString())
-					.setParameter(0, "user_serial")
-					.setParameter(1, serial)
-					.setParameter(2, "user_number")
-					.setParameter(3, number).list();
-			tx.commit();
-			return users.size() == 1 ? (User) users.get(0) : null;
-		}
-		List<?> users = s.createQuery(queryString.toString())
-				.setParameter(0, "user_" + paramName)
+		List<?> users = s.createQuery("from User where ? = ?")
+				.setParameter(0, paramName)
 				.setParameter(1, paramValue).list();
 		tx.commit();
-		return users.size() == 1 ? (User) users.get(0) : null;
+		return users.size() >= 1 ? (User) users.get(0) : null;
 	}
 
 }

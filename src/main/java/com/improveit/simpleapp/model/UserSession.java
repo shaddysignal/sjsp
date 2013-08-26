@@ -2,18 +2,15 @@ package com.improveit.simpleapp.model;
 
 public class UserSession {
 
-	private User user = new User();
+	private int userId = 0;
 	private String step = "first";
 	
-	public User getUser() {
-		return user;
+	public Integer getUserId() {
+		return userId;
 	}
 	
-	public void setUser(User user) {
-		for(String attribute : user) {
-			if(user.getParam(attribute) != null) 
-				this.user.setParam(attribute, user.getParam(attribute));
-		}
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 	
 	public String getStep() {

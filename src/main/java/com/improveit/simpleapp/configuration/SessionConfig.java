@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 
 import com.improveit.simpleapp.dao.UserDao;
-import com.improveit.simpleapp.intreface.IUserDao;
 import com.improveit.simpleapp.model.UserSession;
 import com.improveit.simpleapp.services.UserService;
 
@@ -14,15 +13,15 @@ import com.improveit.simpleapp.services.UserService;
 public class SessionConfig {
 	
 	@Bean
-	@Scope
-	public IUserDao userDao() {
+	@Scope(value="session", proxyMode=ScopedProxyMode.TARGET_CLASS)
+	public UserDao userDao() {
 		UserDao userDao = new UserDao();		
 		return userDao;
 	}
 	
 	@Bean
-	@Scope
-	public UserSession userScope() {
+	@Scope(value="session", proxyMode=ScopedProxyMode.TARGET_CLASS)
+	public UserSession userSession() {
 		UserSession scope = new UserSession();
 		return scope;
 	}
