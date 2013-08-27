@@ -3,7 +3,7 @@ package com.improveit.simpleapp.model;
 public class UserSession {
 
 	private int userId = 0;
-	private String step = "first";
+	private Steps step = Steps.first;
 	
 	public Integer getUserId() {
 		return userId;
@@ -13,11 +13,11 @@ public class UserSession {
 		this.userId = userId;
 	}
 	
-	public String getStep() {
+	public Steps getStep() {
 		return step;
 	}
 	
-	public void setStep(String step) {
+	public void setStep(Steps step) {
 		this.step = step;
 	}
 	

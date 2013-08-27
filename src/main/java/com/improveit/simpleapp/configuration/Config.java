@@ -20,15 +20,17 @@ import org.springframework.web.servlet.config.annotation.DefaultServletHandlerCo
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
-import com.improveit.simpleapp.services.ValidationService;
+import com.improveit.simpleapp.dao.UserDao;
+import com.improveit.simpleapp.services.validators.UserValidator;
 
 @Import({ SessionConfig.class, SecurityConfig.class })
 @Configuration
 @ComponentScan(basePackages = {
 		"com.improveit.simpleapp.controller",
 		"com.improveit.simpleapp.services",
-		"com.improveit.simpleapp.services.rules"
+		"com.improveit.simpleapp.services.validators"
 	})
 @EnableWebMvc
 @EnableTransactionManagement
@@ -65,8 +67,7 @@ public class Config extends WebMvcConfigurerAdapter {
 	@Bean
 	public LocalSessionFactoryBean getSessionFactory() {
 		LocalSessionFactoryBean bean = new LocalSessionFactoryBean();
-		bean.setDataSource(dataSource());
-		bean.setPackagesToScan(new String[] {"com.improveit.simpleapp.model", "com.improveit.simpleapp.services"});
+		bean.setDataSource(dataSource());		
 		bean.setHibernateProperties(getHibernateProperties());
 		return bean;
 	}
@@ -83,28 +84,28 @@ public class Config extends WebMvcConfigurerAdapter {
 	public Properties getHibernateProperties() {
 		Properties prop = new Properties();
 		prop.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
-		prop.put("hibernate.show_sql", env.getProperty("hibernate.dialect"));
 		prop.put("hibernate.current_session_context_class", env.getProperty("hibernate.current_session_context_class"));
 		prop.put("hibernate.hbm2dll.auto", env.getProperty("hibernate.hbm2dll.auto"));
 		return prop;
 	}
 
 	@Bean
-	public ValidationService validator() {
-		return new ValidationService();
+	@Autowired
+	public UserValidator validator(UserDao userDao) {
+		UserValidator bean = new UserValidator();
+		bean.setUserDao(userDao);
+		return bean;
 	}
 	
 	/*@Bean
 	public SimpleMappingExceptionResolver simpleMappingExceptionResolver() {
 		SimpleMappingExceptionResolver bean = new SimpleMappingExceptionResolver();
-		bean.setDefaultErrorView("uncaughtException");
+		bean.setDefaultErrorView("error");
 		Properties mappings = new Properties();
-		mappings.put(".DataAccessException", "dataAccessFailure");
-		mappings.put(".NoSuchRequestHandlingMethodException",
-				"resourceNotFound");
-		mappings.put(".TypeMismatchException", "resourceNotFound");
-		mappings.put(".MissingServletRequestParameterException",
-				"resourceNotFound");
+		mappings.put(".DataAccessException", "error");
+		mappings.put(".NoSuchRequestHandlingMethodException", "error");
+		mappings.put(".TypeMismatchException", "error");
+		mappings.put(".MissingServletRequestParameterException", "error");
 		bean.setExceptionMappings(mappings);
 		return bean;
 	}*/

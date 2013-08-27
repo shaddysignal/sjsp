@@ -40,26 +40,28 @@ public class UserDao {
 	public void setUserDone(int userId) {
 		Session s = sessionFactory.getCurrentSession();
 		Transaction tx = s.beginTransaction();
-		s.createSQLQuery("insert into improve_it.usersDone (?) values (?)").
-			setParameter(0, "user_id").setParameter(1, userId).executeUpdate();
+		s.createSQLQuery("insert into improve_it.usersDone (?) values (?)")
+			.setParameter(0, "user_id").setParameter(1, userId).executeUpdate();
 		tx.commit();
 	}
 	
+	/**
+	 * 
+	 * @param params key-paramName and value-paramValue
+	 * @return
+	 */
 	public List<User> getByParams(Map<String, String> params) {
 		if(params.isEmpty())
 			return getAllUsers();
 		Session s = sessionFactory.getCurrentSession();
 		Transaction tx = s.beginTransaction();
-		StringBuilder query = new StringBuilder("from User where ");
-		for(int i = 0, l = params.size(); i < l; i++) {
-			query.append("? = ? and ");
+		StringBuilder query = new StringBuilder("from User U where ");
+		query.setLength(params.size() * 10);
+		for(String param : params.keySet()) {
+			query.append("U.").append(param).append(" = :").append(param).append(" and ");
 		}		
 		Query q = s.createQuery(query.substring(0, query.lastIndexOf(" and ")));
-		int i = 0;
-		for(Entry<String, String> entry : params.entrySet()) {
-			q.setParameter(i++, entry.getKey());
-			q.setParameter(i++, entry.getValue());
-		}
+		q.setProperties(params);
 		List<?> users = q.list();
 		tx.commit();
 		return (List<User>)users;
@@ -84,11 +86,10 @@ public class UserDao {
 	public User getFirst(String paramName, String paramValue) {
 		Session s = sessionFactory.getCurrentSession();
 		Transaction tx = s.beginTransaction();
-		List<?> users = s.createQuery("from User where ? = ?")
-				.setParameter(0, paramName)
-				.setParameter(1, paramValue).list();
+		User user = (User)s.createQuery("from User U where U." + paramName +  " = ?")				
+				.setParameter(1, paramValue).uniqueResult();
 		tx.commit();
-		return users.size() >= 1 ? (User) users.get(0) : null;
+		return user;
 	}
 
 }

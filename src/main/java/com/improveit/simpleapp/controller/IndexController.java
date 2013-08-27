@@ -1,5 +1,6 @@
 package com.improveit.simpleapp.controller;
 
+import java.util.EnumMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
@@ -11,30 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.improveit.simpleapp.model.Steps;
 import com.improveit.simpleapp.model.User;
 import com.improveit.simpleapp.services.UserService;
-import com.improveit.simpleapp.services.ValidationService;
+import com.improveit.simpleapp.services.validators.UserValidator.Rules;
 
 @Controller
 @RequestMapping("/")
 public class IndexController {
-	
-	private enum STEPS {
-		finale(null), third(finale), second(third),	first(second);
-		
-		private STEPS next;
-		
-		private STEPS(STEPS next) {
-			this.next = next;
-		}
-		
-		public STEPS next() {
-			return next;
-		}
-	};
-	
-	@Autowired
-	private ValidationService validator;
 	
 	@Autowired
 	private UserService userService;
@@ -42,11 +27,12 @@ public class IndexController {
 	@RequestMapping(value="/index", method=RequestMethod.GET)
 	public String index(ModelMap model) {
 		model.addAttribute("user", userService.getCurrentUser());
-		return userService.getUserStep();
+		return userService.getUserStep().toString();
 	}
 	
 	@RequestMapping(value="/define", method=RequestMethod.GET)
-	public String define() {
+	public String define(ModelMap model) {
+		model.addAttribute("user", userService.getCurrentUser());
 		return "index";
 	}
 	
@@ -57,28 +43,30 @@ public class IndexController {
 	}
 	
 	@RequestMapping(value="/undefine", method=RequestMethod.DELETE)
-	public String undefining(@RequestParam User user) {		
+	public String undefining(@RequestParam User user) {
+		// TODO after spring security
 		return "index";
 	}
 	
 	@RequestMapping(value="/first", method=RequestMethod.GET)
-	public String first(User user, ModelMap model) {
+	public String first(ModelMap model) {
 		model.addAttribute("user", userService.getCurrentUser());
-		userService.setUserStep("first");
+		userService.setUserStep(Steps.first);
 		return "first";
 	}
 	
 	@RequestMapping(value="/next_step", method=RequestMethod.POST)
 	public String next_step(@RequestParam Map<String, String> values, User user, ModelMap model) {
-		model.addAttribute("user", userService.getCurrentUser());
-		Map<String, String> errors = validator.valid(values);
+		model.addAttribute("user", user);
+	 	Map<Rules, String> ruleToValue = new EnumMap<Rules, String>(values);
+		Map<String, String> errors = userService.validate(values);
 		if(errors.isEmpty()) {
-			userService.setUserStep(STEPS.valueOf(userService.getUserStep()).next().toString());
+			userService.setUserStep(userService.getUserStep().next());
 			userService.putUser(user);
 		} else {
 			model.addAttribute("errors", errors);
 		}
-		return userService.getUserStep();
+		return userService.getUserStep().toString();
 	}
 	
 	@RequestMapping(value="/finale", method=RequestMethod.POST)

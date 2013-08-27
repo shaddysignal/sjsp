@@ -1,13 +1,17 @@
 package com.improveit.simpleapp.services;
 
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.improveit.simpleapp.dao.UserDao;
+import com.improveit.simpleapp.model.Steps;
 import com.improveit.simpleapp.model.User;
 import com.improveit.simpleapp.model.UserSession;
+import com.improveit.simpleapp.services.validators.UserValidator;
 
 @Service
 public class UserService {
@@ -17,6 +21,18 @@ public class UserService {
 	
 	@Autowired
 	private UserSession userSession;
+	
+	@Autowired
+	private UserValidator userValidator;	
+	
+	/**
+	 * 
+	 * @param parameters key -> rule and value -> valueToTest
+	 * @return errors like key -> rule and value -> error
+	 */
+	public Map<String, String> validate(Map<String, String> parameters) {
+		return userValidator.valid(parameters);
+	}
 	
 	/**
 	 * Delegate create to dao layer.
@@ -57,11 +73,11 @@ public class UserService {
 		return user == null ? new User() : user;
 	}
 	
-	public void setUserStep(String step) {
+	public void setUserStep(Steps step) {
 		userSession.setStep(step);
 	}
 	
-	public String getUserStep() {
+	public Steps getUserStep() {
 		return userSession.getStep();
 	}
 	
