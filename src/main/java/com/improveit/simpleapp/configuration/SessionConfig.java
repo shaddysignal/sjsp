@@ -26,8 +26,7 @@ public class SessionConfig {
 		return scope;
 	}
 	
-	@Bean
-	@Scope(value="session", proxyMode=ScopedProxyMode.TARGET_CLASS)
+	@Bean	
 	public UserService userService() {
 		return new UserService();
 	}

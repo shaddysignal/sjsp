@@ -1,11 +1,14 @@
 package com.improveit.simpleapp.model;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class UserSession {
 
-	private int userId = 0;
-	private Steps step = Steps.first;
+	private int userId;
+	private Steps step = Steps.define;
 	
-	public Integer getUserId() {
+	public int getUserId() {
 		return userId;
 	}
 	

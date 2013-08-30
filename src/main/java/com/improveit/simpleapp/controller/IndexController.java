@@ -1,9 +1,8 @@
 package com.improveit.simpleapp.controller;
 
-import java.util.EnumMap;
+import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.improveit.simpleapp.model.Steps;
 import com.improveit.simpleapp.model.User;
 import com.improveit.simpleapp.services.UserService;
-import com.improveit.simpleapp.services.validators.UserValidator.Rules;
 
 @Controller
 @RequestMapping("/")
@@ -24,28 +22,33 @@ public class IndexController {
 	@Autowired
 	private UserService userService;
 	
-	@RequestMapping(value="/index", method=RequestMethod.GET)
+	@RequestMapping(method=RequestMethod.GET)
 	public String index(ModelMap model) {
 		model.addAttribute("user", userService.getCurrentUser());
-		return userService.getUserStep().toString();
+		return "finale";
 	}
 	
 	@RequestMapping(value="/define", method=RequestMethod.GET)
 	public String define(ModelMap model) {
-		model.addAttribute("user", userService.getCurrentUser());
-		return "index";
+		return "define";
 	}
 	
 	@RequestMapping(value="/define", method=RequestMethod.POST)
-	public String defining(HttpServletResponse response) {
-		// TODO after spring security
-		return "first";
+	public String defining(@RequestParam("email") String uemail, @RequestParam("password") String upassword) {
+		Map<String, String> params = new Hashtable<String, String>(2, 1);
+		params.put("email", uemail);
+		params.put("password", upassword);
+		List<User> login = userService.getUsersByParams(params);
+		if(login.isEmpty())
+			return "error";
+		userService.setUser(login.get(0), Steps.finale);
+		return "redirect:/";
 	}
 	
 	@RequestMapping(value="/undefine", method=RequestMethod.DELETE)
 	public String undefining(@RequestParam User user) {
-		// TODO after spring security
-		return "index";
+		userService.setUser(new User(), Steps.define);
+		return "redirect:/define";
 	}
 	
 	@RequestMapping(value="/first", method=RequestMethod.GET)
@@ -56,16 +59,15 @@ public class IndexController {
 	}
 	
 	@RequestMapping(value="/next_step", method=RequestMethod.POST)
-	public String next_step(@RequestParam Map<String, String> values, User user, ModelMap model) {
-		model.addAttribute("user", user);
-	 	Map<Rules, String> ruleToValue = new EnumMap<Rules, String>(values);
+	public String next_step(@RequestParam Map<String, String> values, User user, ModelMap model) {		
 		Map<String, String> errors = userService.validate(values);
 		if(errors.isEmpty()) {
 			userService.setUserStep(userService.getUserStep().next());
-			userService.putUser(user);
+			userService.putUser(user);			
 		} else {
 			model.addAttribute("errors", errors);
-		}
+		}		
+		model.addAttribute("user", user);
 		return userService.getUserStep().toString();
 	}
 	

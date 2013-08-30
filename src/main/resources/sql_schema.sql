@@ -11,7 +11,7 @@ create table if not exists improve_it.users	(
 	user_phonenumber varchar(11) null,
 	user_email varchar(30) null,
 	user_password varchar(40) not null default "",
-	user_birthdate date null default "00-00-0000",
+	user_birthdate date null default "1900-01-01",
 	user_serial mediumint(4) null,
 	user_number mediumint(6) null,
 	user_region varchar(30) null default "-",

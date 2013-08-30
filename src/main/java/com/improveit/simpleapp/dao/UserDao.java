@@ -55,10 +55,10 @@ public class UserDao {
 			return getAllUsers();
 		Session s = sessionFactory.getCurrentSession();
 		Transaction tx = s.beginTransaction();
-		StringBuilder query = new StringBuilder("from User U where ");
-		query.setLength(params.size() * 10);
+		StringBuilder query = new StringBuilder(params.size() * 10);
+		query.append("from User U where ");
 		for(String param : params.keySet()) {
-			query.append("U.").append(param).append(" = :").append(param).append(" and ");
+			query.append("U.").append(param).append(" = '").append(params.get(param)).append("' and ");
 		}		
 		Query q = s.createQuery(query.substring(0, query.lastIndexOf(" and ")));
 		q.setProperties(params);
@@ -77,6 +77,21 @@ public class UserDao {
 	}
 	
 	/**
+	 * Special for get by id.
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public User getFirst(int id) {
+		Session s = sessionFactory.getCurrentSession();
+		Transaction tx = s.beginTransaction();
+		User user = (User)s.createQuery("from User U where U.id = ?")				
+				.setParameter(0, id).uniqueResult();
+		tx.commit();
+		return user;
+	}
+	
+	/**
 	 * Get only first from selected collection. Use for get by unique
 	 * 
 	 * @param paramName
@@ -87,7 +102,7 @@ public class UserDao {
 		Session s = sessionFactory.getCurrentSession();
 		Transaction tx = s.beginTransaction();
 		User user = (User)s.createQuery("from User U where U." + paramName +  " = ?")				
-				.setParameter(1, paramValue).uniqueResult();
+				.setParameter(0, paramValue).uniqueResult();
 		tx.commit();
 		return user;
 	}

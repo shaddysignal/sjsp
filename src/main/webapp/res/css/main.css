@@ -6,6 +6,22 @@ body * {
 	display: block;
 }
 
-a {
+a, label {
 	display: inline;
+}
+
+script {
+	display: none;
+}
+
+form {
+}
+
+input {
+	height: 25px;
+}
+
+label {
+	height: 25px;
+	color: red;
 }

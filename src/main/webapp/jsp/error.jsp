@@ -6,6 +6,6 @@
 	<%@include file="chunks/head.jsp" %>
 </head>
 <body>
-	<a href="/">Good luck next time</a>
+	<a href="javascript:history.back()">Good luck next time</a>
 </body>
 </html>

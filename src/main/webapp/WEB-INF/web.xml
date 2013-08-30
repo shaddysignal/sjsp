@@ -5,7 +5,7 @@
 <web-app>
 	<display-name>ImproveIt test</display-name>
 	
-	<context-param>
+	<!-- <context-param>
 		<param-name>contextClass</param-name>
 		<param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
 	</context-param>
@@ -33,7 +33,7 @@
 	<servlet-mapping>
 		<servlet-name>simpleServlet</servlet-name>
 		<url-pattern>*.kitty</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping>-->
 	
 	<welcome-file-list>
 		<welcome-file>index.kitty</welcome-file>

@@ -8,12 +8,14 @@
 </head>
 <body>
 	<form:form id="third" action="next_step.kitty" method="POST" commandName="user">
-		<form:input path="region" id="user_region" placeholder="Region" /> 
-		<form:input path="city" id="user_city" placeholder="City" /> 
-		<form:input path="street" id="user_street" placeholder="Street" /> 
-		<a href="javascript:history.back()">back</a> 
-		<a href="javascript:{}" onclick="document.forms['third'].submit()">next step</a>
+		<form:hidden path="id" />
+		<form:input path="region" id="user_region" placeholder="Region" />
+		<form:input path="city" id="user_city" placeholder="City" />
+		<form:input path="street" id="user_street" placeholder="Street" />
+		<div> 
+			<a href="javascript:history.back()">back</a>
+			<a href="javascript:{}" onclick="document.forms['third'].submit()">final</a>
+		</div>
 	</form:form>
-	<script type="text/javascript" src="/js/validate.js"></script>
 </body>
 </html>

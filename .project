@@ -45,4 +45,10 @@
 		<nature>org.eclipse.wst.common.project.facet.core.nature</nature>
 		<nature>org.eclipse.wst.jsdt.core.jsNature</nature>
 	</natures>
+	<variableList>
+		<variable>
+			<name>TOMCAT_LIB</name>
+			<value>file:/usr/local/tomcat7/apache-tomcat-7.0.42/lib</value>
+		</variable>
+	</variableList>
 </projectDescription>

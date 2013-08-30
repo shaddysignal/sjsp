@@ -4,7 +4,7 @@
 	<groupId>com.improveit</groupId>
 	<artifactId>some</artifactId>
 	<packaging>war</packaging>
-	<version>0.9</version>
+	<version>0.95</version>
 
 	<name>something</name>
 	<url>http://localhost:8080/</url>
@@ -77,14 +77,16 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc-portlet</artifactId>
-			<version>${org.springframework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${org.springframework.version}</version>
 			<scope>test</scope>
+		</dependency>
+
+		<!-- For fancy servlet api -->
+		<dependency>
+	        <groupId>javax.servlet</groupId>
+        	<artifactId>javax.servlet-api</artifactId>
+        	<version>3.0.1</version>
 		</dependency>
 
 		<!-- For @Configuration -->
@@ -125,13 +127,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- Also for security-javaconfig -->
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.3</version>
-		</dependency>
-
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -160,6 +155,12 @@
 			<groupId>javax.persistence</groupId>
 			<artifactId>persistence-api</artifactId>
 			<version>1.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
 		</dependency>
 		
 		<!-- Logging tools -->

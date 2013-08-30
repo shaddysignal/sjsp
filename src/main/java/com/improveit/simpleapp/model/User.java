@@ -6,8 +6,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SelectBeforeUpdate;
+
 @Entity
 @Table(name="users")
+@SelectBeforeUpdate
+@DynamicUpdate
+@DynamicInsert
 public class User {
 	
 	@Id
@@ -49,7 +56,7 @@ public class User {
 	
 	@Column(name="user_street")
 	private String street;
-
+	
 	public int getId() {
 		return id;
 	}

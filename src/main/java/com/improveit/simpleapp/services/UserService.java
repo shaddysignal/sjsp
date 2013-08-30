@@ -1,6 +1,5 @@
 package com.improveit.simpleapp.services;
 
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,11 +25,13 @@ public class UserService {
 	private UserValidator userValidator;	
 	
 	/**
+	 * Delegate to validator do job
 	 * 
 	 * @param parameters key -> rule and value -> valueToTest
 	 * @return errors like key -> rule and value -> error
 	 */
 	public Map<String, String> validate(Map<String, String> parameters) {
+		userSession.getStep().addExclusiveRules(parameters);
 		return userValidator.valid(parameters);
 	}
 	
@@ -42,8 +43,15 @@ public class UserService {
 	 * @param user to insert
 	 */
 	public int putUser(User user) {
-		userSession.setUserId(userDao.updateOrCreate(user));
-		return userSession.getUserId();
+		int newUserId = userDao.updateOrCreate(user);
+		userSession.setUserId(newUserId);
+		user.setId(newUserId);
+		return newUserId;
+	}
+	
+	public void setUser(User user, Steps step) {
+		userSession.setUserId(user.getId());
+		userSession.setStep(step);
 	}
 	
 	public void userDone() {
@@ -58,6 +66,16 @@ public class UserService {
 	public List<User> getAllUsers() {
 		return userDao.getAllUsers();
 	}
+
+	/**
+	 * Delegate method to dao layer
+	 * 
+	 * @param params
+	 * @return
+	 */
+	public List<User> getUsersByParams(Map<String, String> params) {
+		return userDao.getByParams(params);
+	}
 	
 	/**
 	 * Delegate remove to dao layer.
@@ -69,7 +87,7 @@ public class UserService {
 	}
 	
 	public User getCurrentUser() {
-		User user = userDao.getFirst("id", userSession.getUserId().toString());		
+		User user = userDao.getFirst(userSession.getUserId());		
 		return user == null ? new User() : user;
 	}
 	
