@@ -4,7 +4,7 @@
 	<groupId>com.improveit</groupId>
 	<artifactId>some</artifactId>
 	<packaging>war</packaging>
-	<version>0.95</version>
+	<version>1.0</version>
 
 	<name>something</name>
 	<url>http://localhost:8080/</url>

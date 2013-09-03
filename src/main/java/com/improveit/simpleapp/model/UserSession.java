@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 public class UserSession {
 
 	private int userId;
-	private Steps step = Steps.define;
+	private Steps step = Steps.first;
 	
 	public int getUserId() {
 		return userId;

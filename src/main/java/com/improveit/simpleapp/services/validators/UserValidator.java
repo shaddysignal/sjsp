@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.improveit.simpleapp.dao.UserDao;
@@ -35,7 +34,7 @@ public class UserValidator {
 			@Override
 			public String valid(String value) {
 				String error = null;
-				if(value.matches("^[a-zA-Z._0-9]+@[a-zA-Z._0-9]+\\.[a-z]{1,4}$")) {
+				if(value.matches("^[a-zA-Z._0-9]+@[a-zA-Z._0-9]+\\.[a-z0-9]{1,4}$")) {
 					if(userDao.getFirst("email", value) != null)
 						error = "That email already exists in database, try another one";
 				} else

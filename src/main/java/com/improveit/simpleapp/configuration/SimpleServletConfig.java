@@ -26,8 +26,8 @@ public class SimpleServletConfig extends WebMvcConfigurerAdapter {
 	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/css/**")
-				.addResourceLocations("/res/css/").setCachePeriod(31556926);
+		registry.addResourceHandler("/css/**").addResourceLocations("/res/css/")
+				.setCachePeriod(31556926);
 		registry.addResourceHandler("/js/**").addResourceLocations("/res/js/")
 				.setCachePeriod(31556926);
 	}

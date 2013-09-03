@@ -2,14 +2,13 @@ package com.improveit.simpleapp.dao;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,12 +21,33 @@ public class UserDao {
 	@Autowired
 	private SessionFactory sessionFactory;
 
-	public int updateOrCreate(User user) {
+	@Autowired
+	private StandardPasswordEncoder encoder;
+	
+	private Integer create(User user) {
+		Session s = sessionFactory.getCurrentSession();
+		Transaction tx = s.beginTransaction(); 
+		Integer userId = (Integer) s.save(user);
+		tx.commit();
+		return userId;
+	}
+	
+	private void update(User user) {
 		Session s = sessionFactory.getCurrentSession();
 		Transaction tx = s.beginTransaction();
-		User mergedUser = (User) s.merge(user);
+		s.update(user);
 		tx.commit();
-		return mergedUser.getId();
+	}
+	
+	public int updateOrCreate(User user) {
+		// Can't find a better place for this
+		String passToCrypt = user.getPassword();
+		if(passToCrypt != null)
+			user.setPassword(encoder.encode(passToCrypt));
+		if(getFirst(user.getId()) == null)
+			return create(user);
+		update(user);
+		return user.getId();
 	}
 
 	public void remove(User existingUser) {
@@ -40,8 +60,8 @@ public class UserDao {
 	public void setUserDone(int userId) {
 		Session s = sessionFactory.getCurrentSession();
 		Transaction tx = s.beginTransaction();
-		s.createSQLQuery("insert into improve_it.usersDone (?) values (?)")
-			.setParameter(0, "user_id").setParameter(1, userId).executeUpdate();
+		s.createSQLQuery("update improve_it.users as u set u.user_done=1 where u.id=?")
+			.setParameter(0, userId).executeUpdate();
 		tx.commit();
 	}
 	
@@ -96,7 +116,7 @@ public class UserDao {
 	 * 
 	 * @param paramName
 	 * @param paramValue
-	 * @return first from collection, or null if there is no users with such param
+	 * @return first by paramName, or null if there is no users with such param
 	 */
 	public User getFirst(String paramName, String paramValue) {
 		Session s = sessionFactory.getCurrentSession();

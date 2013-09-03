@@ -21,12 +21,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
 import com.improveit.simpleapp.dao.UserDao;
+import com.improveit.simpleapp.dao.UserInterceptor;
+import com.improveit.simpleapp.services.UserService;
 import com.improveit.simpleapp.services.validators.UserValidator;
 
 @Import({ SessionConfig.class, SecurityConfig.class })
 @Configuration
 @ComponentScan(basePackages = {
 		"com.improveit.simpleapp.controller",
+		"com.improveit.simpleapp.dao",
 		"com.improveit.simpleapp.services",
 		"com.improveit.simpleapp.services.validators"
 	})
@@ -38,6 +41,12 @@ public class Config extends WebMvcConfigurerAdapter {
 	@Autowired
 	private Environment env;
 
+	@Bean
+	public UserDao userDao() {
+		UserDao userDao = new UserDao();
+		return userDao;
+	}
+	
 	@Bean
 	public DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -52,8 +61,9 @@ public class Config extends WebMvcConfigurerAdapter {
 	public LocalSessionFactoryBean getSessionFactory() {
 		LocalSessionFactoryBean bean = new LocalSessionFactoryBean();
 		bean.setDataSource(dataSource());
-		bean.setPackagesToScan(new String[] {"com.improveit.simpleapp.model", "com.improveit.simpleapp.services"});
+		bean.setPackagesToScan(new String[] {"com.improveit.simpleapp.dao", "com.improveit.simpleapp.model"});
 		bean.setHibernateProperties(getHibernateProperties());
+		bean.setEntityInterceptor(new UserInterceptor());
 		return bean;
 	}
 
@@ -75,6 +85,11 @@ public class Config extends WebMvcConfigurerAdapter {
 	}
 
 	@Bean
+	public UserService userService() {
+		return new UserService();
+	}
+	
+	@Bean
 	@Autowired
 	public UserValidator validator(UserDao userDao) {
 		UserValidator bean = new UserValidator();
@@ -82,17 +97,15 @@ public class Config extends WebMvcConfigurerAdapter {
 		return bean;
 	}
 	
-	@Bean
+	/*@Bean
 	public SimpleMappingExceptionResolver simpleMappingExceptionResolver() {
 		SimpleMappingExceptionResolver bean = new SimpleMappingExceptionResolver();
-		bean.setDefaultErrorView("error");
+		bean.setDefaultErrorView("error/error");
 		Properties mappings = new Properties();
-		mappings.put(".DataAccessException", "error");
-		mappings.put(".NoSuchRequestHandlingMethodException", "error");
-		mappings.put(".TypeMismatchException", "error");
-		mappings.put(".MissingServletRequestParameterException", "error");
+		mappings.put(".UsernameNotFoundException", "error/login");
+		mappings.put(".PageNotFound", "error/404");
 		bean.setExceptionMappings(mappings);
 		return bean;
-	}
+	}*/
 
 }

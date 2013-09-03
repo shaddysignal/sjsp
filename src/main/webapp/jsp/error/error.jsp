@@ -3,7 +3,7 @@
 <html>
 <head>
 	<title>Something failed</title>
-	<%@include file="chunks/head.jsp" %>
+	<%@include file="../chunks/head.jsp" %>
 </head>
 <body>
 	<a href="javascript:history.back()">Good luck next time</a>

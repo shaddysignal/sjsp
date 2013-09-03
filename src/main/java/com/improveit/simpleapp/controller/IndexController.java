@@ -1,15 +1,20 @@
 package com.improveit.simpleapp.controller;
 
-import java.util.Hashtable;
-import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 import com.improveit.simpleapp.model.Steps;
 import com.improveit.simpleapp.model.User;
@@ -19,13 +24,19 @@ import com.improveit.simpleapp.services.UserService;
 @RequestMapping("/")
 public class IndexController {
 	
+	private static final Logger logger = Logger.getLogger(IndexController.class);
+	
 	@Autowired
 	private UserService userService;
 	
 	@RequestMapping(method=RequestMethod.GET)
-	public String index(ModelMap model) {
-		model.addAttribute("user", userService.getCurrentUser());
-		return "finale";
+	public String index() {
+		return "redirect:/step/finale.kitty";
+	}
+	
+	@RequestMapping(value="/error", method=RequestMethod.GET)
+	public String error() {
+		return "error/error";
 	}
 	
 	@RequestMapping(value="/define", method=RequestMethod.GET)
@@ -33,37 +44,32 @@ public class IndexController {
 		return "define";
 	}
 	
-	@RequestMapping(value="/define", method=RequestMethod.POST)
-	public String defining(@RequestParam("email") String uemail, @RequestParam("password") String upassword) {
-		Map<String, String> params = new Hashtable<String, String>(2, 1);
-		params.put("email", uemail);
-		params.put("password", upassword);
-		List<User> login = userService.getUsersByParams(params);
-		if(login.isEmpty())
-			return "error";
-		userService.setUser(login.get(0), Steps.finale);
-		return "redirect:/";
+	@RequestMapping(value="/successDefine", method=RequestMethod.GET)
+	public String successDefine() {
+		userService.setCurrentUser(userService.getFirstUser("email", SecurityContextHolder.getContext().getAuthentication().getName()));		
+		return "redirect:/step/" + userService.getUserStep() + ".kitty";
 	}
 	
-	@RequestMapping(value="/undefine", method=RequestMethod.DELETE)
-	public String undefining(@RequestParam User user) {
-		userService.setUser(new User(), Steps.define);
-		return "redirect:/define";
+	@RequestMapping(value="/undefine", method=RequestMethod.GET)
+	public String undefining() {
+		return "/define";
 	}
 	
-	@RequestMapping(value="/first", method=RequestMethod.GET)
-	public String first(ModelMap model) {
+	@RequestMapping(value="/step/{step}", method=RequestMethod.GET)
+	public String get_step(@PathVariable("step") String step, ModelMap model) {
+		userService.setUserStep(Steps.valueOf(step));
 		model.addAttribute("user", userService.getCurrentUser());
-		userService.setUserStep(Steps.first);
-		return "first";
+		return step;
 	}
 	
 	@RequestMapping(value="/next_step", method=RequestMethod.POST)
-	public String next_step(@RequestParam Map<String, String> values, User user, ModelMap model) {		
+	public String post_next_step(@RequestParam Map<String, String> values, User user, ModelMap model) {
 		Map<String, String> errors = userService.validate(values);
 		if(errors.isEmpty()) {
-			userService.setUserStep(userService.getUserStep().next());
-			userService.putUser(user);			
+			Steps next = userService.getUserStep().next();
+			userService.setUserStep(next);
+			user.setStep(next);
+			userService.mergeUser(user);
 		} else {
 			model.addAttribute("errors", errors);
 		}		
@@ -73,9 +79,21 @@ public class IndexController {
 	
 	@RequestMapping(value="/finale", method=RequestMethod.POST)
 	public String finale(@RequestParam Map<String, String> values, User user, ModelMap model) {
-		model.addAttribute("user", user);
+		Map<String, String> errors = userService.validate(values);
+		if(!errors.isEmpty()) {
+			model.addAttribute("user", user);
+			model.addAttribute("errors", errors);
+			return userService.getUserStep().toString();
+		}
+		user.setStep(Steps.finale);
+		userService.mergeUser(user);
+		Authentication auth = new UsernamePasswordAuthenticationToken(
+				userService.loadUserByUsername(userService.getCurrentUser().getEmail()),
+				new SimpleGrantedAuthority("ROLE_USER")
+			);
+		SecurityContextHolder.getContext().setAuthentication(auth);
 		userService.userDone();
-		return "finale";
+		return "redirect:/step/finale.kitty";
 	}
 
 }

@@ -8,11 +8,12 @@
 	String email = "";
 	String password = "";
 	String repeatpassword = "";
-	if((Map<String,String>)request.getAttribute("errors") != null) {
-		phonenumber = ((Map<String,String>)request.getAttribute("errors")).get("phonenumber");
-		email = ((Map<String,String>)request.getAttribute("errors")).get("email");
-		password = ((Map<String,String>)request.getAttribute("errors")).get("password");
-		repeatpassword = ((Map<String,String>)request.getAttribute("errors")).get("repeatpassword");
+	Map<String,String> errors = (Map<String,String>)request.getAttribute("errors");
+	if(errors != null) {
+		phonenumber = errors.get("phonenumber");
+		email = errors.get("email");
+		password = errors.get("password");
+		repeatpassword = errors.get("repeatpassword");
 	}
 %>
 <!DOCTYPE html5>
@@ -22,7 +23,8 @@
 	<%@include file="chunks/head.jsp" %>
 </head>
 <body>
-	<form:form id="first" action="next_step.kitty" method="POST" commandName="user" autocomplete="true">
+	<form:form id="first" action="/next_step.kitty" method="POST" commandName="user" autocomplete="true">
+		<form:hidden path="id" />
 		<form:input path="firstName" id="user_firstName" placeholder="First Name"/>
 		<form:input path="secondName" id="user_secondName" placeholder="Second Name"/>
 		<form:input path="fathersName" id="user_fathersName" placeholder="Fathers Name"/>

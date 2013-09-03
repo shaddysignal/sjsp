@@ -34,14 +34,13 @@ public enum Steps {
 			existingValuesToValidate.put("repeatpassword", repeatpassword);
 			return existingValuesToValidate;
 		}
-	},
-	define(first);
+	};
 	
 	private Steps next;
 	
 	private Steps(Steps next) {
 		this.next = next;
-	}	
+	}
 	
 	/**
 	 * Extend existing pairs of <rule, value> for exclusive check

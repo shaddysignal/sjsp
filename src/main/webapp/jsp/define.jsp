@@ -8,9 +8,9 @@
 <body>
 	<h2>Hello Stranger!</h2>
 	<p>Want to be recognized?</p>
-	<a href="first.kitty" class="button">Let's go!</a>
+	<a href="/step/first.kitty" class="button">Let's go!</a>
 	<p>Or we already met?</p>
-	<form id="login_form" action="define.kitty" method="post">
+	<form id="login_form" action="/define.kitty" method="post">
 		<input type="text" id="user_email" name="email" placeholder="email" /> 
 		<input type="password" id="user_password" name="password" placeholder="Password" />
 		<a href="javascript:{}" onclick="document.forms['login_form'].submit()" class="button">Define you</a>

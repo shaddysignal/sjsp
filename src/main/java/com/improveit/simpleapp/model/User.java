@@ -2,6 +2,8 @@ package com.improveit.simpleapp.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -16,11 +18,11 @@ import org.hibernate.annotations.SelectBeforeUpdate;
 @DynamicUpdate
 @DynamicInsert
 public class User {
-	
+
 	@Id
 	@GeneratedValue
 	private int id;
-	
+		
 	@Column(name="user_first_name")
 	private String firstName;
 	
@@ -47,7 +49,7 @@ public class User {
 	
 	@Column(name="user_number")
 	private String number;
-	
+
 	@Column(name="user_region")
 	private String region;
 	
@@ -56,6 +58,10 @@ public class User {
 	
 	@Column(name="user_street")
 	private String street;
+
+	@Column(name="user_step")
+	@Enumerated(EnumType.STRING)
+	private Steps step = Steps.first;
 	
 	public int getId() {
 		return id;
@@ -161,5 +167,12 @@ public class User {
 		this.street = street;
 	}
 
+	public Steps getStep() {
+		return step;
+	}
 
+	public void setStep(Steps step) {
+		this.step = step;
+	}
+	
 }

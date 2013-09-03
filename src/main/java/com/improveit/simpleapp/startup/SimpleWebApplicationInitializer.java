@@ -12,23 +12,24 @@ import org.springframework.web.servlet.DispatcherServlet;
 import com.improveit.simpleapp.configuration.Config;
 import com.improveit.simpleapp.configuration.SimpleServletConfig;
 
-public class WebInitializer implements WebApplicationInitializer {
+public class SimpleWebApplicationInitializer implements WebApplicationInitializer {
 
 	public void onStartup(ServletContext servletContext) throws ServletException {
-		AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
+		AnnotationConfigWebApplicationContext rootContext =
+				new AnnotationConfigWebApplicationContext();
 		rootContext.register(Config.class);
 		
 		servletContext.addListener(new ContextLoaderListener(rootContext));
-		
+				
 		AnnotationConfigWebApplicationContext dispatcherContext = 
 				new AnnotationConfigWebApplicationContext();
 		dispatcherContext.register(SimpleServletConfig.class);
 		
 		ServletRegistration.Dynamic dispatcher = servletContext.addServlet(
 				"simpleServlet", new DispatcherServlet(dispatcherContext));
-		dispatcher.setLoadOnStartup(5);
+		dispatcher.setLoadOnStartup(1);
 		dispatcher.addMapping("*.kitty");
-		
+				
 	}
 
 }
