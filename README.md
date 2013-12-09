@@ -1,4 +1,5 @@
-some
+Simple Java Spring project
 ====
 
-Something
+Almost all configs in .java with annotation @Config
+Also and Security.
